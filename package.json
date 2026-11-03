@@ -1,0 +1,17 @@
+{
+  "name": "daftary",
+  "version": "1.0.0",
+  "private": true,
+  "description": "دفتري — نظام إدارة الدروس والطلبة والحضور والفلوس",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node scripts/smoke-test.js",
+    "reset": "node scripts/reset-db.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
