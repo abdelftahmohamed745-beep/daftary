@@ -8,14 +8,17 @@
     <title>دفتري — إدارة الدروس</title>
     <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/fonts/fonts.css" />
-    <link rel="stylesheet" href="/css/app.css" />
-    <script src="/js/theme-init.js"></script>
+    <link rel="stylesheet" href="/css/app.css?v=4" />
+    <script src="/js/theme-init.js?v=4"></script>
+    <script src="/js/boot-guard.js?v=4" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#app">روح للمحتوى</a>
     <div id="app">
-      <div style="min-height: 100vh; display: grid; place-items: center; color: var(--muted); font-size: 13px">
-        بجهّز دفتري…
+      <div class="boot-splash" data-boot-splash>
+        <span class="boot-mark">د</span>
+        <span class="boot-spin" aria-hidden="true"></span>
+        <span class="boot-text">بجهّز دفتري…</span>
       </div>
     </div>
     <div class="toasts" aria-live="polite"></div>
@@ -25,6 +28,6 @@
         دفتري محتاج JavaScript شغال في المتصفح عشان يشتغل.
       </div>
     </noscript>
-    <script type="module" src="/js/app.js"></script>
+    <script type="module" src="/js/app.js?v=4"></script>
   </body>
 </html>

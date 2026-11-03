@@ -283,12 +283,18 @@ export const api = {
   onError: null,
   onUnauthorized: null,
 
-  async request(path, { method = 'GET', body, headers = {}, signal } = {}) {
+  async request(path, { method = 'GET', body, headers = {}, signal, timeout = 20000 } = {}) {
+    // A request that never settles would leave the app stuck on the boot
+    // splash forever (slow cold starts, flaky mobile networks), so every call
+    // gets its own deadline unless the caller passes a signal.
+    const controller = new AbortController();
+    let timer = null;
+    if (!signal && timeout) timer = setTimeout(() => controller.abort(), timeout);
     const options = {
       method,
       credentials: 'same-origin',
       headers: { Accept: 'application/json', ...headers },
-      signal,
+      signal: signal || controller.signal,
     };
     if (body !== undefined) {
       options.headers['Content-Type'] = 'application/json';
@@ -298,10 +304,19 @@ export const api = {
     try {
       response = await fetch(path, options);
     } catch (error) {
-      if (error.name === 'AbortError') throw error;
+      if (error.name === 'AbortError') {
+        if (signal) throw error;
+        const message = 'السيرفر اتأخر في الرد. جرّب تحدّث الصفحة.';
+        if (this.onError) this.onError(message);
+        const timeoutError = new Error(message);
+        timeoutError.timeout = true;
+        throw timeoutError;
+      }
       const message = 'مش قادر أوصل للسيرفر. اتأكد إنه شغال وجرب تاني.';
       if (this.onError) this.onError(message);
       throw new Error(message);
+    } finally {
+      if (timer) clearTimeout(timer);
     }
     if (response.status === 401) {
       if (this.onUnauthorized) this.onUnauthorized();

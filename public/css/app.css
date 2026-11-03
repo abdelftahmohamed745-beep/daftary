@@ -2618,3 +2618,47 @@ a.mini-rank:hover { background: var(--surface-2); border-color: var(--line); }
   border-radius: 8px;
 }
 .skip-link:focus { inset-inline-start: 8px; }
+
+/* ============ Boot splash ============ */
+.boot-splash {
+  min-height: 100vh;
+  display: grid;
+  grid-auto-flow: row;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.boot-mark {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, var(--teal), #17302b);
+  color: #f6f1e6;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 27px;
+  font-weight: 700;
+  box-shadow: 0 18px 36px -22px rgba(19, 58, 50, 0.8);
+  animation: bootPulse 2.2s ease-in-out infinite;
+}
+.boot-spin {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--teal) 22%, transparent);
+  border-top-color: var(--teal);
+  animation: bootSpin 0.9s linear infinite;
+}
+.boot-text { letter-spacing: 0.2px; }
+@keyframes bootSpin { to { transform: rotate(360deg); } }
+@keyframes bootPulse {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.03); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .boot-mark, .boot-spin { animation-duration: 6s; }
+  .boot-spin { animation: none; border-top-color: var(--teal); }
+}
