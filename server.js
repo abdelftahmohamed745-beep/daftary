@@ -1,5 +1,11 @@
 'use strict';
 
+// Serverless builds (Vercel) mount the project read-only, so the demo database
+// has to live somewhere writable. This must run before lib/db resolves paths.
+if (process.env.VERCEL && !process.env.DAFTARY_DATA_DIR) {
+  process.env.DAFTARY_DATA_DIR = '/tmp/daftary-data';
+}
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -431,4 +437,12 @@ if (require.main === module) {
   });
 }
 
-module.exports = { createServer, start, requestListener, routes };
+// Vercel's zero-config Node runtime imports this file directly and expects the
+// module itself to be the request handler, so the listener is the default
+// export while the named helpers stay attached for scripts and api/index.js.
+module.exports = requestListener;
+module.exports.default = requestListener;
+module.exports.createServer = createServer;
+module.exports.start = start;
+module.exports.requestListener = requestListener;
+module.exports.routes = routes;
