@@ -13,25 +13,26 @@ const { AppError, fail } = require('./lib/utils');
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const BODY_LIMIT = 14 * 1024 * 1024;
 
+// Listed explicitly (not with a variable) so bundlers such as Vercel's can
+// statically trace every route module into the deployed function.
 const ROUTE_MODULES = [
-  './routes/auth',
-  './routes/students',
-  './routes/groups',
-  './routes/lessons',
-  './routes/finance',
-  './routes/assignments',
-  './routes/materials',
-  './routes/exams',
-  './routes/achievements',
-  './routes/operations',
-  './routes/portal',
-  './routes/reports',
-  './routes/admin',
+  require('./routes/auth'),
+  require('./routes/students'),
+  require('./routes/groups'),
+  require('./routes/lessons'),
+  require('./routes/finance'),
+  require('./routes/assignments'),
+  require('./routes/materials'),
+  require('./routes/exams'),
+  require('./routes/achievements'),
+  require('./routes/operations'),
+  require('./routes/portal'),
+  require('./routes/reports'),
+  require('./routes/admin'),
 ];
 
 const routes = [];
-for (const modulePath of ROUTE_MODULES) {
-  const list = require(modulePath);
+for (const list of ROUTE_MODULES) {
   for (const route of list) routes.push(route);
 }
 
